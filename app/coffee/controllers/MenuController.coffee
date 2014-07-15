@@ -7,11 +7,10 @@ class ManuController extends BaseController
  
   # initialize the controller
   initialize: ->
+    @loadMenuJson()
+
+  loadMenuJson: ->
     @$scope.menuJson = [
       {"title":"view1"},
       {"title":"view2"},
     ]
-
-    @$scope.msg =
-      title: "Hello"
- 

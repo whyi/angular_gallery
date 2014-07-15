@@ -18,16 +18,17 @@
     ManuController.inject('$scope');
 
     ManuController.prototype.initialize = function() {
-      this.$scope.menuJson = [
+      return this.loadMenuJson();
+    };
+
+    ManuController.prototype.loadMenuJson = function() {
+      return this.$scope.menuJson = [
         {
           "title": "view1"
         }, {
           "title": "view2"
         }
       ];
-      return this.$scope.msg = {
-        title: "Hello"
-      };
     };
 
     return ManuController;
