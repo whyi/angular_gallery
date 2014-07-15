@@ -7,6 +7,8 @@
   app = angular.module('myApp');
 
   ManuController = (function(_super) {
+    var MENU_JSON_API_PATH;
+
     __extends(ManuController, _super);
 
     function ManuController() {
@@ -15,20 +17,20 @@
 
     ManuController.register(app, "MenuController");
 
-    ManuController.inject('$scope');
+    ManuController.inject('$scope', '$http');
+
+    MENU_JSON_API_PATH = "api/menuJson";
 
     ManuController.prototype.initialize = function() {
       return this.loadMenuJson();
     };
 
     ManuController.prototype.loadMenuJson = function() {
-      return this.$scope.menuJson = [
-        {
-          "title": "view1"
-        }, {
-          "title": "view2"
-        }
-      ];
+      return this.$http.get(MENU_JSON_API_PATH).success(response)((function(_this) {
+        return function() {
+          return _this.$scope.menuJson = response;
+        };
+      })(this));
     };
 
     return ManuController;

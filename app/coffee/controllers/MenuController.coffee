@@ -3,14 +3,15 @@ app = angular.module 'myApp'
 class ManuController extends BaseController
   @register app, "MenuController"
 
-  @inject '$scope'
+  @inject '$scope', '$http'
  
+  MENU_JSON_API_PATH = "api/menuJson"
+
   # initialize the controller
   initialize: ->
     @loadMenuJson()
 
   loadMenuJson: ->
-    @$scope.menuJson = [
-      {"title":"view1"},
-      {"title":"view2"},
-    ]
+    @$http.get(MENU_JSON_API_PATH)
+      .success(response) =>
+        @$scope.menuJson = response
