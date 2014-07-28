@@ -5,12 +5,10 @@
   app = angular.module('myApp', ['ngRoute', 'ui.bootstrap']).config([
     '$routeProvider', function($routeProvider) {
       $routeProvider.when('/view1', {
-        templateUrl: 'partials/partial1.html',
-        controller: MyCtrl1
+        templateUrl: 'partials/partial1.html'
       });
       $routeProvider.when('/view2', {
-        templateUrl: 'partials/partial2.html',
-        controller: MyCtrl2
+        templateUrl: 'partials/partial2.html'
       });
       return $routeProvider.otherwise({
         redirectTo: '/view1'
@@ -23,5 +21,7 @@
   if (!root.app) {
     root.app = app;
   }
+
+  angular.bootstrap(document, ['myApp']);
 
 }).call(this);

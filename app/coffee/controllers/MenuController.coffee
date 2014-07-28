@@ -1,6 +1,6 @@
 app = angular.module 'myApp'
  
-class ManuController extends BaseController
+class MenuController extends BaseController
   @register app, "MenuController"
 
   @inject '$scope', '$http'
@@ -9,9 +9,12 @@ class ManuController extends BaseController
 
   # initialize the controller
   initialize: ->
+    @$scope.menuJson = {}
     @loadMenuJson()
 
   loadMenuJson: ->
     @$http.get(MENU_JSON_API_PATH)
-      .success(response) =>
+      .success (response) =>
         @$scope.menuJson = response
+      .error (response) =>
+        console.log(angular.toJson(response))
