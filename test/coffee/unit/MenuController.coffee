@@ -2,6 +2,7 @@ describe "MenuController", ->
 	beforeEach module('myApp')
 
 	HTTP_OK = 200
+	HTTP_NOT_FOUND = 404
 	menuController = null
 	httpBackend = null
 	scope = null
@@ -25,9 +26,14 @@ describe "MenuController", ->
 	    ]
 	}
 
+	SAMPLE_ERROR_JSON = {
+		"statusCode": "HTTP_NOT_FOUND"
+		"erorrMessage": "couldn\'t load menu json"
+    }
+
 	# expectations and mocks
-	givenAjaxCallReturns = (json) ->
-		httpBackend.when("GET", MENU_JSON_API_PATH).respond(HTTP_OK, json)
+	givenAjaxCallReturns = (status, json) ->
+		httpBackend.when("GET", MENU_JSON_API_PATH).respond(status, json)
 
 	# invocations
 	whenInitialize = ->
@@ -36,6 +42,7 @@ describe "MenuController", ->
 
 	whenLoadMenuJson = ->
 		spyOn(http, "get").andCallThrough()
+		spyOn(menuController, "reportError").andCallThrough()
 		menuController.loadMenuJson()
 
 	# comparisons
@@ -50,6 +57,10 @@ describe "MenuController", ->
 		httpBackend.flush()
 		expect(scope.menuJson).toEqual(json)
 
+	thenReportErrorIsCalledWith = (errorMessage) ->
+		httpBackend.flush()
+		expect(menuController.reportError).toHaveBeenCalledWith(errorMessage)
+
 	describe "when initialize", ->
 		beforeEach ->
 			whenInitialize()
@@ -59,7 +70,7 @@ describe "MenuController", ->
 
 	describe "given ajax call to " + MENU_JSON_API_PATH + " is successful", ->
 		beforeEach ->
-			givenAjaxCallReturns(SAMPLE_MENU_JSON)
+			givenAjaxCallReturns(HTTP_OK, SAMPLE_MENU_JSON)
 
 		describe "when load menu json", ->
 			beforeEach ->
@@ -70,3 +81,17 @@ describe "MenuController", ->
 
 			it "should set the json to scope", ->
 				thenMenuJsonInScopeIs(SAMPLE_MENU_JSON)
+
+	describe "given ajax call to " + MENU_JSON_API_PATH + " returns 404", ->
+		beforeEach ->
+			givenAjaxCallReturns(HTTP_NOT_FOUND, SAMPLE_ERROR_JSON)
+
+		describe "when load menu json", ->
+			beforeEach ->
+				whenLoadMenuJson()
+
+			it "should make ajax call to " + MENU_JSON_API_PATH, ->
+				thenAjaxCallIsMadeTo(MENU_JSON_API_PATH)
+
+			it "should report error", ->
+				thenReportErrorIsCalledWith(SAMPLE_ERROR_JSON["errorMessage"])
