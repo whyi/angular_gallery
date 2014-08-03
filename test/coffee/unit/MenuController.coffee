@@ -95,3 +95,17 @@ describe "MenuController", ->
 
 			it "should report error", ->
 				thenReportErrorIsCalledWith(SAMPLE_ERROR_JSON["errorMessage"])
+
+	describe "when reportError()", ->
+		beforeEach ->
+			menuController.reportError()
+
+		it "should display error as \"Sorry, there was an error occurred.\"", ->
+			expect(scope.errorMessage).toBe("Sorry, there was an error occurred.")
+
+	describe "when reportError(\"foo\")", ->
+		beforeEach ->
+			menuController.reportError("foo")
+
+		it "should display error as \"foo\"", ->
+			expect(scope.errorMessage).toBe("foo")

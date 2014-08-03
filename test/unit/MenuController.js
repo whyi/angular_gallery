@@ -83,7 +83,7 @@
         });
       });
     });
-    return describe("given ajax call to " + MENU_JSON_API_PATH + " returns 404", function() {
+    describe("given ajax call to " + MENU_JSON_API_PATH + " returns 404", function() {
       beforeEach(function() {
         return givenAjaxCallReturns(HTTP_NOT_FOUND, SAMPLE_ERROR_JSON);
       });
@@ -97,6 +97,22 @@
         return it("should report error", function() {
           return thenReportErrorIsCalledWith(SAMPLE_ERROR_JSON["errorMessage"]);
         });
+      });
+    });
+    describe("when reportError()", function() {
+      beforeEach(function() {
+        return menuController.reportError();
+      });
+      return it("should display error as \"Sorry, there was an error occurred.\"", function() {
+        return expect(scope.errorMessage).toBe("Sorry, there was an error occurred.");
+      });
+    });
+    return describe("when reportError(\"foo\")", function() {
+      beforeEach(function() {
+        return menuController.reportError("foo");
+      });
+      return it("should display error as \"foo\"", function() {
+        return expect(scope.errorMessage).toBe("foo");
       });
     });
   });

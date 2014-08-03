@@ -7,7 +7,7 @@
   app = angular.module('myApp');
 
   MenuController = (function(_super) {
-    var MENU_JSON_API_PATH;
+    var DEFAULT_ERROR_MESSAGE, MENU_JSON_API_PATH;
 
     __extends(MenuController, _super);
 
@@ -21,9 +21,18 @@
 
     MENU_JSON_API_PATH = "api/menuJson";
 
+    DEFAULT_ERROR_MESSAGE = "Sorry, there was an error occurred.";
+
     MenuController.prototype.initialize = function() {
       this.$scope.menuJson = {};
       return this.loadMenuJson();
+    };
+
+    MenuController.prototype.reportError = function(errorMessage) {
+      if (errorMessage == null) {
+        errorMessage = DEFAULT_ERROR_MESSAGE;
+      }
+      return this.$scope.errorMessage = errorMessage;
     };
 
     MenuController.prototype.loadMenuJson = function() {
@@ -33,7 +42,7 @@
         };
       })(this)).error((function(_this) {
         return function(response) {
-          return console.log(angular.toJson(response));
+          return _this.reportError(response["errorMessage"]);
         };
       })(this));
     };
