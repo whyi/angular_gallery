@@ -10,4 +10,4 @@ root = exports ? this
 unless root.app
   root.app = app
 
-angular.bootstrap(document,['myApp'])
+#angular.bootstrap(document,['myApp'])

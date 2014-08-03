@@ -22,6 +22,4 @@
     root.app = app;
   }
 
-  angular.bootstrap(document, ['myApp']);
-
 }).call(this);
